@@ -1,5 +1,24 @@
 import { Schema, model } from "mongoose";
 const { ObjectId } = Schema;
+
+const planSchema = new Schema({
+  planType: {
+    type: String,
+    required: true,
+  },
+  delivery: {
+    type: Number,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  points: {
+    type: Array,
+  },
+});
+
 const gigsSchema = new Schema({
   title: {
     type: String,
@@ -15,13 +34,7 @@ const gigsSchema = new Schema({
   eventType: {
     type: Array,
   },
-  pricing: {
-    type: Number,
-    required: true,
-  },
-  delivery: {
-    type: Number,
-  },
+  plans: [planSchema],
   locations: {
     type: Array,
   },

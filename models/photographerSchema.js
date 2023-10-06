@@ -8,7 +8,8 @@ const photographerSchema = new Schema(
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Please provide email!"],
+      unique: true,
     },
     username: {
       type: String,
@@ -43,9 +44,7 @@ const photographerSchema = new Schema(
       default: 0,
     },
     gigs: [{ type: ObjectId, ref: "gigs" }],
-    contacts: {
-      type: Array,
-    },
+    contacts: [{ type: ObjectId, ref: "customers" }],
     verified: {
       type: Boolean,
       default: false,
