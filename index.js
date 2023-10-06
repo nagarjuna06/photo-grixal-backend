@@ -1,1 +1,3 @@
-console.log('index');
+import connectDB from "./db/db.js";
+
+connectDB();
