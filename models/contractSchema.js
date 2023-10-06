@@ -1,37 +1,31 @@
 import { Schema, model } from "mongoose";
 
+const { ObjectId } = Schema;
 const contractSchema = new Schema(
-    {
-        photographerId:{
-            type:Number,
-            required:true,
-            unique: true,
-        },
-        customerId:{
-            type:Number,
-            required:true,
-            unique: true,
-        },
-        gigId:{
-            type:Number,
-            required:true,
-            unique:true,
-        },
-        amount:{
-            type:Number,
-            required:true,
-        },
-        contractStatus:{
-            type:String,
-            default:"pending",
-        }
+  {
+    photographerId: {
+      type: ObjectId,
+      ref: "photographers",
     },
-    {
-        timestamps: {
-          createdAt: "contractDate",
-          updatedAt: true,
-        },
-    }
+    customerId: {
+      type: ObjectId,
+      ref: "customers",
+    },
+    gigId: {
+      type: ObjectId,
+      ref: "gigs",
+    },
+    contractStatus: {
+      type: String,
+      default: "pending",
+    },
+  },
+  {
+    timestamps: {
+      createdAt: "contractDate",
+      updatedAt: true,
+    },
+  }
 );
 
-export default model("contractSchema", contracts);
+export default model("contracts", contractSchema);
