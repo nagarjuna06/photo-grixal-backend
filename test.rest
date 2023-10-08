@@ -1,11 +1,49 @@
 @host=http://localhost:5000/api
 ###
-POST {{host}}/auth/register
+POST {{host}}/auth/photographer/register
 Content-Type: application/json
 
 {
-    "name":"nagarjuna",
-    "email":"nagarjuna2@gmail.com",
-    "username":"arjun3",
-    "password":"1234567890"
+    "name":"hareesh",
+    "email":"madahareesh12@gmail.com",
+    "username":"hareesh",
+    "password":"1234567890",
+    "purpose":"register"
+}
+###
+
+POST {{host}}/auth/photographer/resend
+Content-Type: application/json
+
+{
+    "email":"madahareesh12@gmail.com",
+    "purpose":"resend"
+}
+
+###
+
+POST {{host}}/auth/photographer/verify
+Content-Type: application/json
+
+{
+    "email":"madahareesh12@gmail.com",
+    "otp":"846244"
+}
+
+###
+POST {{host}}/auth/photographer/reset
+Content-Type: application/json
+
+{
+    "email":"madahareesh12@gmail.com",
+    "purpose":"reset"
+}
+###
+PUT {{host}}/auth/photographer/verify
+Content-Type: application/json
+
+{
+    "email":"madahareesh12@gmail.com",
+    "otp":"943308",
+    "password":"741852963"
 }
