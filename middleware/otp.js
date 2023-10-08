@@ -4,7 +4,7 @@ import {
   BadRequestError,
   InternalServerError,
 } from "../request-errors/index.js";
-import { getOtpPurpose, getUsertypeModel } from "../utils/switchCases.js";
+import { getOtpPurpose, getUserTypeModel } from "../utils/switchCases.js";
 
 export const generateOtp = () => {
   return Math.floor(100000 + Math.random() * 900000);
@@ -14,19 +14,15 @@ export const sendOtp = async (req, res, next) => {
   try {
     const otp = generateOtp();
     const email = req.body.email;
-  
-    let subject = getOtpPurpose(req.body.purpose);
-    let model = getUsertypeModel(req.body.userType);
 
+    let subject = getOtpPurpose(req.body.purpose);
+    let model = getUserTypeModel(req.body.userType);
 
     let name = null;
     if ("name" in req.body) {
       name = req.body.name;
     } else {
-      const user = await model.findOne(
-        { email },
-        { name: 1, _id: 0 }
-      );
+      const user = await model.findOne({ email }, { name: 1, _id: 0 });
       name = user ? user.name : null;
     }
     if (!name) {
@@ -51,15 +47,17 @@ export const sendOtp = async (req, res, next) => {
 export const verifyOtp = async (req, res, next) => {
   try {
     const { email: recipient, otp } = req.body;
-    let model = getUsertypeModel(req.body.userType);
+    let model = getUserTypeModel(req.body.userType);
     const exist = await otpModel.findOne({ recipient });
     if (exist) {
       if (exist.otp == otp) {
         await otpModel.deleteOne({ recipient, otp });
-        await model.updateOne(
+        const user = await model.findOneAndUpdate(
           { email: recipient },
-          { verified: true }
+          { verified: true },
+          { new: true }
         );
+        req.user = user;
         next();
       } else {
         return BadRequestError(res, "Incorrect OTP.You can try again");

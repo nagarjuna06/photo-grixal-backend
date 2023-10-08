@@ -17,7 +17,6 @@ const customerSchema = new Schema({
   },
   address: {
     type: String,
-    required: true,
   },
   contacts: [{ type: ObjectId, ref: "photographers" }],
   verified: {
