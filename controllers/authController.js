@@ -1,16 +1,16 @@
 import { passwordEncryption } from "../middleware/passwordMiddleWare.js";
-import photographerSchema from "../models/photographerSchema.js";
 import {
   BadRequestError,
   InternalServerError,
 } from "../request-errors/index.js";
 
-export const registerPhotoGrapher = async (req, res, next) => {
+
+export const register = async (req, res, next) => {
+  let model = getUsertypeModel(req.body.userType);
   try {
     const password = await passwordEncryption(req.body.password);
-    const user = await photographerSchema.create({ ...req.body, password });
+    const user = await model.create({ ...req.body, password });
     req.user = user;
-    req.userType = "photographer";
     next();
   } catch (error) {
     if (error.code === 11000) {
@@ -24,9 +24,10 @@ export const registerPhotoGrapher = async (req, res, next) => {
 };
 
 export const updatePassword = async (req, res) => {
+  let model = getUsertypeModel(req.body.userType);
   try {
     const password = await passwordEncryption(req.body.password);
-    await photographerSchema.updateOne({ email: req.body.email }, { password });
+    await model.updateOne({ email: req.body.email }, { password });
     return res.json({ msg: "Password Updated Successfully!" });
   } catch (error) {
     return InternalServerError(res, error.message);

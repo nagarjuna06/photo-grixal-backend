@@ -43,6 +43,9 @@ const photographerSchema = new Schema(
       type: Number,
       default: 0,
     },
+    roles: {
+      type : Array,
+    },
     gigs: [{ type: ObjectId, ref: "gigs" }],
     contacts: [{ type: ObjectId, ref: "customers" }],
     verified: {

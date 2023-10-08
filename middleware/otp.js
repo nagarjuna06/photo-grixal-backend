@@ -4,6 +4,7 @@ import {
   BadRequestError,
   InternalServerError,
 } from "../request-errors/index.js";
+import { getOtpPurpose, getUsertypeModel } from "../utils/switchCases.js";
 
 export const generateOtp = () => {
   return Math.floor(100000 + Math.random() * 900000);
@@ -13,27 +14,16 @@ export const sendOtp = async (req, res, next) => {
   try {
     const otp = generateOtp();
     const email = req.body.email;
-    const purpose = req.body.purpose;
-    let subject = null;
-    switch (purpose) {
-      case "register":
-        subject = "OTP Verification";
-        break;
-      case "resend":
-        subject = "OTP Verification";
-        break;
-      case "reset":
-        subject = "OTP for Password Reset verification";
-        break;
-      default:
-        subject = "";
-    }
+  
+    let subject = getOtpPurpose(req.body.purpose);
+    let model = getUsertypeModel(req.body.userType);
+
 
     let name = null;
     if ("name" in req.body) {
       name = req.body.name;
     } else {
-      const user = await photographerSchema.findOne(
+      const user = await model.findOne(
         { email },
         { name: 1, _id: 0 }
       );
@@ -61,12 +51,12 @@ export const sendOtp = async (req, res, next) => {
 export const verifyOtp = async (req, res, next) => {
   try {
     const { email: recipient, otp } = req.body;
-
+    let model = getUsertypeModel(req.body.userType);
     const exist = await otpModel.findOne({ recipient });
     if (exist) {
       if (exist.otp == otp) {
         await otpModel.deleteOne({ recipient, otp });
-        await photographerSchema.updateOne(
+        await model.updateOne(
           { email: recipient },
           { verified: true }
         );
