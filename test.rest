@@ -1,4 +1,5 @@
 @host=http://localhost:5000/api
+@contentType=Content-Type: application/json
 ###
 POST {{host}}/auth/photographer/register
 Content-Type: application/json
@@ -46,4 +47,49 @@ Content-Type: application/json
     "email":"madahareesh12@gmail.com",
     "otp":"943308",
     "password":"741852963"
+}
+
+###
+
+POST {{host}}/auth/photographer/login
+Content-Type: application/json
+
+{
+    "email":"madahareesh12@gmail.com",
+    "password":"741852963",
+    "userType":"photographer"
+}
+
+###
+
+POST {{host}}/auth/customer/register
+Content-Type: application/json
+
+{
+    "email":"chennanagarjuna3777@gmail.com",
+    "name":"nagarjuna",
+    "password":"789456",
+    "userType":"customer",
+    "purpose":"register"
+}
+###
+
+POST {{host}}/auth/customer/verify
+{{contentType}}
+
+{
+    "email":"chennanagarjuna3777@gmail.com",
+    "otp":"957543",
+    "userType":"customer"
+
+}
+###
+
+POST {{host}}/auth/customer/login
+{{contentType}}
+
+{
+    "email":"chennanagarjuna3777@gmail.com",
+    "password":"789456",
+    "userType":"customer"
 }
