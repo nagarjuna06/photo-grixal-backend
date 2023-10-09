@@ -50,8 +50,9 @@ Content-Type: application/json
 }
 
 ###
+###
 
-POST {{host}}/auth/photographer/login
+POST {{host}}/auth/login
 Content-Type: application/json
 
 {

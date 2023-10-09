@@ -12,29 +12,16 @@ const authRouter = express.Router();
 
 authRouter.use(apiLimiter);
 
-authRouter.post("/photographer/register", register, sendOtp, sendMail);
+authRouter.post("/register", register, sendOtp, sendMail);
 
-authRouter.post("/photographer/resend", sendOtp, sendMail);
+authRouter.post("/resend", sendOtp, sendMail);
 
-authRouter.post("/photographer/verify", verifyOtp, createAccessToken);
+authRouter.post("/verify", verifyOtp, createAccessToken);
 
-authRouter.post("/photographer/reset", sendOtp, sendMail);
+authRouter.post("/reset", sendOtp, sendMail);
 
-authRouter.put("/photographer/verify", verifyOtp, updatePassword);
+authRouter.put("/verify", verifyOtp, updatePassword);
 
-authRouter.post("/photographer/login", login, createAccessToken);
-
-//customer authentication routes
-authRouter.post("/customer/register", register, sendOtp, sendMail);
-
-authRouter.post("/customer/resend", sendOtp, sendMail);
-
-authRouter.post("/customer/verify", verifyOtp, createAccessToken);
-
-authRouter.post("/customer/reset", sendOtp, sendMail);
-
-authRouter.put("/customer/verify", verifyOtp, updatePassword);
-
-authRouter.post("/customer/login", login, createAccessToken);
+authRouter.post("/login", login, createAccessToken);
 
 export default authRouter;
