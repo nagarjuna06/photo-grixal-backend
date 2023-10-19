@@ -10,18 +10,18 @@ import { createAccessToken } from "../middleware/accessToken.js";
 import apiLimiter from "../middleware/apiLimiter.js";
 const authRouter = express.Router();
 
-authRouter.use(apiLimiter);
+// authRouter.use(apiLimiter);
 
-authRouter.post("/register", register, sendOtp, sendMail);
+authRouter.post("/:userType/register", register, sendOtp, sendMail);
 
-authRouter.post("/resend", sendOtp, sendMail);
+authRouter.post("/:userType/resend", sendOtp, sendMail);
 
-authRouter.post("/verify", verifyOtp, createAccessToken);
+authRouter.post("/:userType/verify", verifyOtp, createAccessToken);
 
-authRouter.post("/reset", sendOtp, sendMail);
+authRouter.post("/:userType/reset", sendOtp, sendMail);
 
-authRouter.put("/verify", verifyOtp, updatePassword);
+authRouter.put("/:userType/verify", verifyOtp, updatePassword);
 
-authRouter.post("/login", login, createAccessToken);
+authRouter.post("/:userType/login", login, createAccessToken);
 
 export default authRouter;

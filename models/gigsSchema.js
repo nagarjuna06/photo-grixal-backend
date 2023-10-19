@@ -19,26 +19,28 @@ const planSchema = new Schema({
   },
 });
 
-const gigsSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
+const gigsSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+    images: {
+      type: Array,
+    },
+    eventType: {
+      type: Array,
+    },
+    plans: [planSchema],
+    locations: {
+      type: Array,
+    },
+    photographer: { type: ObjectId, ref: "photographers" },
   },
-  description: {
-    type: String,
-  },
-  images: {
-    type: Array,
-    required: true,
-  },
-  eventType: {
-    type: Array,
-  },
-  plans: [planSchema],
-  locations: {
-    type: Array,
-  },
-  photographer: { type: ObjectId, ref: "photographers" },
-});
+  { timestamps: true }
+);
 
 export default model("gigs", gigsSchema);

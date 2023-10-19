@@ -7,7 +7,7 @@ const profileRoutes = express.Router();
 profileRoutes.use(verifyAccessToken);
 
 profileRoutes.put(
-  "/",
+  "/:userType",
   upload.single("profile"),
   uploadProfileImage,
   updateProfile

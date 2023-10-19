@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
 
 const checkFileType = function (req, file, cb) {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
-    return cb(new BadRequestError("Only image files are accepted!"), false);
+    return cb(null, false);
   }
   cb(null, true);
 };
