@@ -10,7 +10,7 @@ import {
 import { getUserTypeModel } from "../utils/switchCases.js";
 
 export const register = async (req, res, next) => {
-  let model = getUserTypeModel(req.body.userType);
+  let model = getUserTypeModel(req.params.userType);
   try {
     const password = await passwordEncryption(req.body.password);
     const user = await model.create({ ...req.body, password });
@@ -28,7 +28,7 @@ export const register = async (req, res, next) => {
 };
 
 export const updatePassword = async (req, res) => {
-  let model = getUserTypeModel(req.body.userType);
+  let model = getUserTypeModel(req.params.userType);
   try {
     const password = await passwordEncryption(req.body.password);
     await model.updateOne({ email: req.body.email }, { password });
@@ -40,8 +40,8 @@ export const updatePassword = async (req, res) => {
 
 export const login = async (req, res, next) => {
   try {
-    const { email, password, userType } = req.body;
-    const model = getUserTypeModel(userType);
+    const { email, password } = req.body;
+    const model = getUserTypeModel(req.params.userType);
     const user = await model.findOne({ email });
     if (user) {
       const valid = await comparePassword(password, user.password);

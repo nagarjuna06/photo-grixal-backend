@@ -52,13 +52,12 @@ Content-Type: application/json
 ###
 ###
 
-POST {{host}}/auth/login
+POST {{host}}/auth/photographer/login
 Content-Type: application/json
 
 {
     "email":"madahareesh12@gmail.com",
-    "password":"741852963",
-    "userType":"photographer"
+    "password":"741852963"
 }
 
 ###
