@@ -39,6 +39,11 @@ const gigsSchema = new Schema(
       type: Array,
     },
     photographer: { type: ObjectId, ref: "photographers" },
+    status: {
+      type: String,
+      default: "unpublish",
+      enum: ["unpublish", "review", "approve", "publish"],
+    },
   },
   { timestamps: true }
 );

@@ -90,6 +90,5 @@ POST {{host}}/auth/customer/login
 
 {
     "email":"chennanagarjuna3777@gmail.com",
-    "password":"789456",
-    "userType":"customer"
+    "password":"789456"
 }

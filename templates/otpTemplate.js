@@ -1,4 +1,4 @@
-const otpTemplate = (name, otp, site) => {
+const otpTemplate = (name, otp, site, role) => {
   return `<!DOCTYPE html>
       <html lang="en">
         <head>
@@ -47,7 +47,7 @@ const otpTemplate = (name, otp, site) => {
         <body>
           <div class="container">
             <h1>One-Time Password (OTP)</h1>
-            <p>Dear user, <strong>${name}</strong></p>
+            <p>Dear ${role}, <strong>${name}</strong></p>
             <p>Your OTP is:</p>
             <p class="otp-code">${otp}</p>
             <p class="instructions">

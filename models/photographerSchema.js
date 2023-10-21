@@ -44,7 +44,7 @@ const photographerSchema = new Schema(
       default: 0,
     },
     roles: {
-      type : Array,
+      type: Array,
     },
     gigs: [{ type: ObjectId, ref: "gigs" }],
     contacts: [{ type: ObjectId, ref: "customers" }],
@@ -52,7 +52,12 @@ const photographerSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    block: {
+      type: Boolean,
+      default: false,
+    },
   },
+
   {
     timestamps: {
       createdAt: "joined",

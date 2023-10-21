@@ -1,5 +1,6 @@
+import adminSchema from "../models/adminSchema.js";
 import otpModel from "../models/otpSchema.js";
-import photographerSchema from "../models/photographerSchema.js";
+
 import {
   BadRequestError,
   InternalServerError,
@@ -14,9 +15,14 @@ export const sendOtp = async (req, res, next) => {
   try {
     const otp = generateOtp();
     const email = req.body.email;
-
+    const role = req.params?.userType ? req.params.userType : req.user.role;
+    let model;
     let subject = getOtpPurpose(req.body.purpose);
-    let model = getUserTypeModel(req.body.userType);
+    if (req.params?.userType) {
+      model = getUserTypeModel(req.params.userType);
+    } else {
+      model = adminSchema;
+    }
 
     let name = null;
     if ("name" in req.body) {
@@ -36,7 +42,13 @@ export const sendOtp = async (req, res, next) => {
       { recipient: email, otp },
       { upsert: true }
     );
-    req.mail = { name, recipient: email, otp, subject };
+    req.mail = {
+      name,
+      recipient: email,
+      otp,
+      subject,
+      role,
+    };
     next();
   } catch (err) {
     res.status(500);
@@ -46,9 +58,18 @@ export const sendOtp = async (req, res, next) => {
 
 export const verifyOtp = async (req, res, next) => {
   try {
-    const { email: recipient, otp } = req.body;
-    let model = getUserTypeModel(req.body.userType);
+    const { email: recipient, otp, role = "" } = req.body;
+
+    let model;
+
+    if (req.params.userType) {
+      model = getUserTypeModel(req.params.userType);
+    } else {
+      model = adminSchema;
+    }
+
     const exist = await otpModel.findOne({ recipient });
+
     if (exist) {
       if (exist.otp == otp) {
         await otpModel.deleteOne({ recipient, otp });
@@ -57,7 +78,9 @@ export const verifyOtp = async (req, res, next) => {
           { verified: true },
           { new: true }
         );
+
         req.user = user;
+        req.user.role = req.params?.userType ? req.params.userType : role;
         next();
       } else {
         return BadRequestError(res, "Incorrect OTP.You can try again");

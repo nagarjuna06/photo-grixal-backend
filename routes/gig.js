@@ -7,11 +7,8 @@ import {
 } from "../controllers/gigController.js";
 import upload from "../middleware/multer.js";
 import { multipleGigImages } from "../middleware/cloudinary.js";
-import { verifyAccessToken } from "../middleware/accessToken.js";
 
 const gigRoutes = express.Router();
-
-gigRoutes.use(verifyAccessToken);
 
 gigRoutes.get("/", getPhotographerGigs);
 

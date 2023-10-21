@@ -4,13 +4,13 @@ import photographerSchema from "../models/photographerSchema.js";
 import { InternalServerError } from "../request-errors/index.js";
 
 export const createGig = async (req, res, next) => {
-  req.body.photographer = req.user.userId;
+  req.body.photographer = req.user.id;
   try {
     const gig = await gigsSchema.create(req.body);
     await photographerSchema.updateOne(
       { _id: req.user.id },
       {
-        $push: { gigs: gig._id },
+        $addToSet: { gigs: gig._id },
       }
     );
     req.body._id = gig._id;
@@ -45,7 +45,7 @@ export const deleteGig = async (req, res) => {
     }
     await gigsSchema.deleteOne({ _id: gigId });
     await photographerSchema.updateOne(
-      { _id: req.user.userId },
+      { _id: req.user.id },
       { $pull: { gigs: gigId } }
     );
     return res.json({ msg: "post deleted Successfully" });
@@ -56,7 +56,7 @@ export const deleteGig = async (req, res) => {
 
 export const getPhotographerGigs = async (req, res) => {
   try {
-    const gigs = await gigsSchema.find({ photographer: req.user.userId });
+    const gigs = await gigsSchema.find({ photographer: req.user.id });
     return res.json(gigs);
   } catch (error) {
     return InternalServerError(res, error.message);

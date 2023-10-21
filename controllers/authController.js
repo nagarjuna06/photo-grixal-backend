@@ -7,13 +7,11 @@ import {
   InternalServerError,
   UnauthorizedError,
 } from "../request-errors/index.js";
-import { getUserTypeModel } from "../utils/switchCases.js";
 
 export const register = async (req, res, next) => {
-  let model = getUserTypeModel(req.params.userType);
   try {
     const password = await passwordEncryption(req.body.password);
-    const user = await model.create({ ...req.body, password });
+    const user = await req.model.create({ ...req.body, password });
     req.user = user;
     next();
   } catch (error) {
@@ -28,10 +26,9 @@ export const register = async (req, res, next) => {
 };
 
 export const updatePassword = async (req, res) => {
-  let model = getUserTypeModel(req.params.userType);
   try {
     const password = await passwordEncryption(req.body.password);
-    await model.updateOne({ email: req.body.email }, { password });
+    await req.model.updateOne({ email: req.body.email }, { password });
     return res.json({ msg: "Password Updated Successfully!" });
   } catch (error) {
     return InternalServerError(res, error.message);
@@ -41,12 +38,14 @@ export const updatePassword = async (req, res) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const model = getUserTypeModel(req.params.userType);
-    const user = await model.findOne({ email });
+    const user = await req.model.findOne({ email });
     if (user) {
       const valid = await comparePassword(password, user.password);
-      if (valid) {
+      if (!user.verified) {
+        return UnauthorizedError(res, "User not verified!");
+      } else if (valid) {
         req.user = user;
+        req.user.role = req.params.userType;
         next();
       } else {
         return UnauthorizedError(res, "Incorrect password!");

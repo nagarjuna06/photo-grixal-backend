@@ -13,6 +13,9 @@ export const getOtpPurpose = (purpose) => {
     case "reset":
       subject = "OTP for Password Reset verification";
       break;
+    case "login":
+      subject = "OTP Verification";
+      break;
     default:
       subject = "";
   }
